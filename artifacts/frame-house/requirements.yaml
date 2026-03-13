@@ -1,0 +1,34 @@
+packages:
+  "framer-motion": "For smooth scroll reveals, entry animations, and component transitions (accordions, tabs)"
+  "react-hook-form": "For robust contact form state management and validation"
+  "@hookform/resolvers": "Zod resolver for react-hook-form"
+  "zod": "Schema validation for the contact form"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility to merge tailwind classes without style conflicts"
+
+images:
+  - path: "artifacts/frame-house/public/images/hero-bg.png"
+    description: "A stunning, modern A-frame wooden house situated in a lush, dense pine forest during golden hour sunset. Warm, inviting lighting glows from the large glass windows. Architectural photography, photorealistic, 8k resolution, premium feel."
+    aspect_ratio: "16:9"
+  - path: "artifacts/frame-house/public/images/project-1.png"
+    description: "Architectural exterior rendering of a cozy 78 sq meter modern frame house with wood siding and large windows, surrounded by neat landscaping, daytime, photorealistic."
+    aspect_ratio: "4:3"
+  - path: "artifacts/frame-house/public/images/project-2.png"
+    description: "Architectural exterior rendering of a comfortable 96 sq meter modern frame house with a mix of dark painted wood and natural timber finishes, realistic lighting."
+    aspect_ratio: "4:3"
+  - path: "artifacts/frame-house/public/images/project-3.png"
+    description: "Architectural exterior rendering of a beautiful 120 sq meter family frame house, pitched roof, extensive decking, warm sunset lighting, photorealistic."
+    aspect_ratio: "4:3"
+  - path: "artifacts/frame-house/public/images/project-4.png"
+    description: "Architectural exterior rendering of a spacious 145 sq meter modern frame house with flat roof elements, minimalist design, concrete and wood textures."
+    aspect_ratio: "4:3"
+  - path: "artifacts/frame-house/public/images/project-5.png"
+    description: "Architectural exterior rendering of a large 168 sq meter countryside frame house, classic gable roof, elegant porch, surrounded by nature, daylight."
+    aspect_ratio: "4:3"
+  - path: "artifacts/frame-house/public/images/project-6.png"
+    description: "Architectural exterior rendering of a premium 210 sq meter luxury frame house, expansive glass facades, multi-level terraces, sophisticated lighting, photorealistic 8k."
+    aspect_ratio: "4:3"
+
+notes:
+  - This is a frontend-only application. The contact form will simulate submission using UI toasts.
+  - The design features a warm, earthy color palette reflecting construction, wood, and nature.

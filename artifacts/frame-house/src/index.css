@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: hsl(40 33% 98%); /* Warm off-white #faf9f6 */
+  --color-foreground: hsl(24 6% 15%); /* Dark brown/gray #292524 */
+  
+  /* Primary: Warm Amber/Orange */
+  --color-primary: hsl(32 95% 44%); 
+  --color-primary-foreground: hsl(0 0% 100%);
+  
+  /* Secondary: Forest Green */
+  --color-secondary: hsl(142 16% 28%); 
+  --color-secondary-foreground: hsl(0 0% 100%);
+  
+  /* Accent: Soft Terracotta */
+  --color-accent: hsl(15 60% 60%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(24 6% 15%);
+  
+  --color-muted: hsl(40 20% 92%);
+  --color-muted-foreground: hsl(24 6% 45%);
+  
+  --color-border: hsl(40 20% 85%);
+  --color-input: hsl(40 20% 85%);
+  --color-ring: hsl(32 95% 44%);
+
+  --font-sans: 'DM Sans', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+}
+
+:root {
+  --background: 40 33% 98%;
+  --foreground: 24 6% 15%;
+  --primary: 32 95% 44%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 16% 28%;
+  --secondary-foreground: 0 0% 100%;
+  --card: 0 0% 100%;
+  --card-foreground: 24 6% 15%;
+  --muted: 40 20% 92%;
+  --muted-foreground: 24 6% 45%;
+  --border: 40 20% 85%;
+  --input: 40 20% 85%;
+  --ring: 32 95% 44%;
+  --radius: 1rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-foreground;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+}
