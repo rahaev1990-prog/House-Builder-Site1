@@ -111,9 +111,9 @@ export function Projects() {
         </div>
 
         <div className="mt-10 text-center md:hidden">
-          <Button variant="outline" className="w-full" asChild>
-            <a href="#contact">Получить расчёт</a>
-          </Button>
+          <a href="#contact" className="w-full block">
+            <Button variant="outline" className="w-full">Получить расчёт</Button>
+          </a>
         </div>
       </div>
     </section>

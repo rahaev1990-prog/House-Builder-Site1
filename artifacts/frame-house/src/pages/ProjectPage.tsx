@@ -1,16 +1,29 @@
 import { useParams, Link } from "wouter";
-import { motion } from "framer-motion";
-import { ArrowLeft, Maximize2, BedDouble, Bath, Layers, Star, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowLeft,
+  Maximize2,
+  BedDouble,
+  Bath,
+  Layers,
+  Star,
+  ChevronRight,
+  Check,
+  Info,
+} from "lucide-react";
 import { useState } from "react";
 import { PROJECTS } from "@/data/projects";
+import { CONFIGURATIONS, CONFIG_KEYS, type ConfigKey } from "@/data/configurations";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { cn } from "@/lib/utils";
 
 export default function ProjectPage() {
   const params = useParams<{ id: string }>();
   const project = PROJECTS.find((p) => p.id === params.id);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [activeConfig, setActiveConfig] = useState<ConfigKey>("optimum");
 
   if (!project) {
     return (
@@ -24,6 +37,13 @@ export default function ProjectPage() {
   }
 
   const otherProjects = PROJECTS.filter((p) => p.id !== project.id).slice(0, 3);
+  const currentConfig = CONFIGURATIONS[activeConfig];
+
+  const configPriceMap: Record<ConfigKey, string> = {
+    econom: `от ${(Number(project.area) * 40000).toLocaleString("ru-RU")} ₽`,
+    optimum: `от ${(Number(project.area) * 50000).toLocaleString("ru-RU")} ₽`,
+    maximum: `от ${(Number(project.area) * 60000).toLocaleString("ru-RU")} ₽`,
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -48,6 +68,7 @@ export default function ProjectPage() {
             <span className="text-foreground font-medium">{project.name}</span>
           </motion.div>
 
+          {/* Hero: Gallery + Info */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             {/* Gallery */}
             <motion.div
@@ -62,7 +83,7 @@ export default function ProjectPage() {
                   className="w-full h-full object-cover transition-all duration-500"
                 />
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-foreground font-bold text-lg px-4 py-2 rounded-xl shadow">
-                  {project.price}
+                  {configPriceMap[activeConfig]}
                 </div>
               </div>
 
@@ -118,21 +139,27 @@ export default function ProjectPage() {
                   <BedDouble className="w-6 h-6 text-primary mb-2" />
                   <span className="text-2xl font-bold">{project.bedrooms}</span>
                   <span className="text-xs text-muted-foreground">
-                    {Number(project.bedrooms) === 1 ? "спальня" : Number(project.bedrooms) < 5 ? "спальни" : "спален"}
+                    {Number(project.bedrooms) === 1
+                      ? "спальня"
+                      : Number(project.bedrooms) < 5
+                      ? "спальни"
+                      : "спален"}
                   </span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-muted/50 rounded-2xl">
                   <Bath className="w-6 h-6 text-primary mb-2" />
                   <span className="text-2xl font-bold">{project.bathrooms}</span>
                   <span className="text-xs text-muted-foreground">
-                    {Number(project.bathrooms) === 1 ? "санузел" : Number(project.bathrooms) < 5 ? "санузла" : "санузлов"}
+                    {Number(project.bathrooms) === 1
+                      ? "санузел"
+                      : Number(project.bathrooms) < 5
+                      ? "санузла"
+                      : "санузлов"}
                   </span>
                 </div>
               </div>
 
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                {project.description}
-              </p>
+              <p className="text-muted-foreground leading-relaxed mb-6">{project.description}</p>
 
               {/* Features */}
               <div className="mb-8">
@@ -162,9 +189,142 @@ export default function ProjectPage() {
             </motion.div>
           </div>
 
-          {/* Tech Specs + Floor Plan */}
+          {/* Configuration Selector */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                Выберите <span className="text-primary">комплектацию</span>
+              </h2>
+              <p className="text-muted-foreground">
+                Выберите подходящий вариант — характеристики и стоимость обновятся автоматически
+              </p>
+            </div>
+
+            {/* Config Tabs */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              {CONFIG_KEYS.map((key) => {
+                const cfg = CONFIGURATIONS[key];
+                const isActive = activeConfig === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setActiveConfig(key)}
+                    className={cn(
+                      "flex-1 relative px-6 py-5 rounded-2xl text-left border-2 transition-all duration-300",
+                      isActive
+                        ? "bg-white border-primary shadow-lg scale-[1.02]"
+                        : "bg-card border-border/50 hover:border-primary/40 hover:bg-white"
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3
+                          className={cn(
+                            "text-xl font-bold font-display mb-1",
+                            isActive ? "text-primary" : "text-foreground"
+                          )}
+                        >
+                          {cfg.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-3">{cfg.subtitle}</p>
+                      </div>
+                      {isActive && (
+                        <div className="bg-primary/10 rounded-full p-1 flex-shrink-0">
+                          <Check className="w-4 h-4 text-primary" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className={cn("text-lg font-bold", isActive ? cfg.color : "text-foreground")}>
+                        {cfg.price}
+                      </div>
+                      <div className="text-sm text-primary font-semibold mt-1">
+                        {configPriceMap[key]} — за этот проект
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Config Details */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeConfig}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-3xl border border-border shadow-xl overflow-hidden"
+              >
+                <div className="p-6 md:p-8 border-b border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold">
+                      Комплектация{" "}
+                      <span className={currentConfig.color}>«{currentConfig.title}»</span>
+                    </h3>
+                    <p className="text-muted-foreground text-sm mt-1">{currentConfig.subtitle}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className={cn("text-2xl font-bold", currentConfig.color)}>
+                      {configPriceMap[activeConfig]}
+                    </div>
+                    <div className="text-sm text-muted-foreground">за {project.area} м²</div>
+                  </div>
+                </div>
+
+                <div className="p-6 md:p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
+                    {currentConfig.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="flex gap-4 p-4 rounded-xl hover:bg-muted/40 transition-colors"
+                      >
+                        <div className="mt-1 bg-primary/10 p-1.5 rounded-full h-fit flex-shrink-0">
+                          <Check className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-foreground mb-1">{feature.name}</h4>
+                          <p className="text-muted-foreground text-sm leading-relaxed">
+                            {feature.desc}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 p-5 bg-amber-50 rounded-2xl flex items-start gap-4 border border-amber-100">
+                    <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-amber-900 leading-relaxed">
+                      Цена рассчитана исходя из {project.area} м² × {activeConfig === "econom" ? "40 000" : activeConfig === "optimum" ? "50 000" : "60 000"} ₽/м². Итоговая стоимость уточняется после подготовки индивидуальной сметы.
+                    </p>
+                  </div>
+
+                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                    <a href="/#contact" className="flex-1">
+                      <Button size="lg" className="w-full">
+                        Заказать в комплектации «{currentConfig.title}»
+                      </Button>
+                    </a>
+                    <a href="/#contact" className="flex-1">
+                      <Button size="lg" variant="outline" className="w-full">
+                        Получить точный расчёт
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Base Specs + Floor Plan */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {/* Tech Specs */}
+            {/* Base project specs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -173,18 +333,21 @@ export default function ProjectPage() {
             >
               <div className="flex items-center gap-2 mb-5">
                 <Layers className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-bold">Технические характеристики</h2>
+                <h2 className="text-xl font-bold">Базовые характеристики проекта</h2>
               </div>
               <dl className="space-y-4">
                 {[
                   { label: "Фундамент", value: project.specs.foundation },
-                  { label: "Стены", value: project.specs.walls },
                   { label: "Кровля", value: project.specs.roof },
-                  { label: "Утепление", value: project.specs.insulation },
                   { label: "Высота потолков", value: project.specs.ceiling },
-                  { label: "Пол", value: project.specs.floor },
+                  { label: "Количество этажей", value: `${project.floors} ${project.floors === "1" ? "этаж" : "этажа"}` },
+                  { label: "Площадь", value: `${project.area} м²` },
+                  { label: "Спальни / санузлы", value: `${project.bedrooms} / ${project.bathrooms}` },
                 ].map(({ label, value }) => (
-                  <div key={label} className="flex flex-col sm:flex-row sm:justify-between gap-1 pb-3 border-b border-border/40 last:border-0 last:pb-0">
+                  <div
+                    key={label}
+                    className="flex flex-col sm:flex-row sm:justify-between gap-1 pb-3 border-b border-border/40 last:border-0 last:pb-0"
+                  >
                     <dt className="text-sm text-muted-foreground font-medium">{label}</dt>
                     <dd className="text-sm font-semibold sm:text-right max-w-xs">{value}</dd>
                   </div>
@@ -221,7 +384,10 @@ export default function ProjectPage() {
                         <div
                           className="h-full bg-primary/60 rounded-full"
                           style={{
-                            width: `${Math.min((Number(room.area) / Number(project.area)) * 100 * 3, 100)}%`,
+                            width: `${Math.min(
+                              (Number(room.area) / Number(project.area)) * 100 * 3,
+                              100
+                            )}%`,
                           }}
                         />
                       </div>
