@@ -1,63 +1,10 @@
 import { motion } from "framer-motion";
 import { Maximize2, BedDouble, Bath } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-
-const PROJECTS = [
-  {
-    name: "Проект «Уют»",
-    image: "project-1.png",
-    area: "78",
-    bedrooms: "2",
-    bathrooms: "1",
-    price: "от 2 850 000 ₽"
-  },
-  {
-    name: "Проект «Комфорт»",
-    image: "project-2.png",
-    area: "96",
-    bedrooms: "3",
-    bathrooms: "1",
-    price: "от 3 600 000 ₽"
-  },
-  {
-    name: "Проект «Семейный»",
-    image: "project-3.png",
-    area: "120",
-    bedrooms: "3",
-    bathrooms: "2",
-    price: "от 4 200 000 ₽"
-  },
-  {
-    name: "Проект «Просторный»",
-    image: "project-4.png",
-    area: "145",
-    bedrooms: "4",
-    bathrooms: "2",
-    price: "от 5 100 000 ₽"
-  },
-  {
-    name: "Проект «Загородный»",
-    image: "project-5.png",
-    area: "168",
-    bedrooms: "4",
-    bathrooms: "3",
-    price: "от 6 300 000 ₽"
-  },
-  {
-    name: "Проект «Премиум»",
-    image: "project-6.png",
-    area: "210",
-    bedrooms: "5",
-    bathrooms: "3",
-    price: "от 8 500 000 ₽"
-  }
-];
+import { PROJECTS } from "@/data/projects";
 
 export function Projects() {
-  const handleProjectClick = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section id="projects" className="py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6">
@@ -80,36 +27,47 @@ export function Projects() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <Button variant="outline" className="hidden md:flex">
-              Смотреть весь каталог
-            </Button>
+            <a href="#contact" className="hidden md:flex">
+              <Button variant="outline">Получить расчёт</Button>
+            </a>
           </motion.div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {PROJECTS.map((project, index) => (
             <motion.div
-              key={index}
+              key={project.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-card rounded-2xl overflow-hidden shadow-lg border border-border/50 group flex flex-col h-full hover:shadow-2xl transition-all duration-300"
             >
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={`${import.meta.env.BASE_URL}images/${project.image}`}
-                  alt={project.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-foreground font-bold px-3 py-1 rounded-lg shadow-sm">
-                  {project.price}
+              <Link href={`/projects/${project.id}`} className="block">
+                <div className="relative h-64 overflow-hidden cursor-pointer">
+                  <img
+                    src={`${import.meta.env.BASE_URL}images/${project.image}`}
+                    alt={project.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-foreground font-bold px-3 py-1 rounded-lg shadow-sm">
+                    {project.price}
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 text-foreground font-semibold text-sm px-4 py-2 rounded-lg shadow">
+                      Смотреть проект →
+                    </span>
+                  </div>
                 </div>
-              </div>
-              
+              </Link>
+
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-2xl font-bold mb-4 font-display">{project.name}</h3>
-                
+                <Link href={`/projects/${project.id}`}>
+                  <h3 className="text-2xl font-bold mb-4 font-display hover:text-primary transition-colors cursor-pointer">
+                    {project.name}
+                  </h3>
+                </Link>
+
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   <div className="flex flex-col items-center justify-center p-3 bg-muted/50 rounded-xl">
                     <Maximize2 className="w-5 h-5 text-primary mb-1" />
@@ -117,27 +75,44 @@ export function Projects() {
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-muted/50 rounded-xl">
                     <BedDouble className="w-5 h-5 text-primary mb-1" />
-                    <span className="text-sm font-medium">{project.bedrooms}</span>
+                    <span className="text-sm font-medium">
+                      {project.bedrooms}{" "}
+                      {Number(project.bedrooms) === 1
+                        ? "спальня"
+                        : Number(project.bedrooms) < 5
+                        ? "спальни"
+                        : "спален"}
+                    </span>
                   </div>
                   <div className="flex flex-col items-center justify-center p-3 bg-muted/50 rounded-xl">
                     <Bath className="w-5 h-5 text-primary mb-1" />
-                    <span className="text-sm font-medium">{project.bathrooms}</span>
+                    <span className="text-sm font-medium">
+                      {project.bathrooms}{" "}
+                      {Number(project.bathrooms) === 1
+                        ? "санузел"
+                        : Number(project.bathrooms) < 5
+                        ? "санузла"
+                        : "санузлов"}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="mt-auto pt-2">
-                  <Button className="w-full" onClick={handleProjectClick}>
-                    Хочу такой дом
-                  </Button>
+
+                <div className="mt-auto pt-2 flex gap-2">
+                  <Link href={`/projects/${project.id}`} className="flex-1">
+                    <Button className="w-full">Подробнее</Button>
+                  </Link>
+                  <a href="#contact" className="flex-1">
+                    <Button variant="outline" className="w-full">Хочу такой</Button>
+                  </a>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-        
+
         <div className="mt-10 text-center md:hidden">
-          <Button variant="outline" className="w-full">
-            Смотреть весь каталог
+          <Button variant="outline" className="w-full" asChild>
+            <a href="#contact">Получить расчёт</a>
           </Button>
         </div>
       </div>
