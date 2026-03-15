@@ -1,5 +1,5 @@
 import { useParams, Link } from "wouter";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Maximize2,
@@ -8,16 +8,14 @@ import {
   Layers,
   Star,
   ChevronRight,
-  Check,
-  Info,
 } from "lucide-react";
 import { useState } from "react";
 import { PROJECTS } from "@/data/projects";
-import { CONFIGURATIONS, CONFIG_KEYS, type ConfigKey } from "@/data/configurations";
+import { CONFIGURATIONS, type ConfigKey } from "@/data/configurations";
+import { ConfigTabs, ConfigFeatures } from "@/components/ui/config-panel";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { cn } from "@/lib/utils";
 
 export default function ProjectPage() {
   const params = useParams<{ id: string }>();
@@ -37,9 +35,8 @@ export default function ProjectPage() {
   }
 
   const otherProjects = PROJECTS.filter((p) => p.id !== project.id).slice(0, 3);
-  const currentConfig = CONFIGURATIONS[activeConfig];
 
-  const configPriceMap: Record<ConfigKey, string> = {
+  const configPriceMap: Partial<Record<ConfigKey, string>> = {
     econom: `от ${(Number(project.area) * 40000).toLocaleString("ru-RU")} ₽`,
     optimum: `от ${(Number(project.area) * 50000).toLocaleString("ru-RU")} ₽`,
     maximum: `от ${(Number(project.area) * 60000).toLocaleString("ru-RU")} ₽`,
@@ -196,130 +193,37 @@ export default function ProjectPage() {
             viewport={{ once: true }}
             className="mb-16"
           >
-            <div className="mb-8">
+            <div className="mb-6">
               <h2 className="text-2xl md:text-3xl font-bold mb-2">
                 Выберите <span className="text-primary">комплектацию</span>
               </h2>
               <p className="text-muted-foreground">
-                Выберите подходящий вариант — характеристики и стоимость обновятся автоматически
+                Характеристики и стоимость обновляются автоматически
               </p>
             </div>
 
-            {/* Config Tabs */}
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
-              {CONFIG_KEYS.map((key) => {
-                const cfg = CONFIGURATIONS[key];
-                const isActive = activeConfig === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => setActiveConfig(key)}
-                    className={cn(
-                      "flex-1 relative px-6 py-5 rounded-2xl text-left border-2 transition-all duration-300",
-                      isActive
-                        ? "bg-white border-primary shadow-lg scale-[1.02]"
-                        : "bg-card border-border/50 hover:border-primary/40 hover:bg-white"
-                    )}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3
-                          className={cn(
-                            "text-xl font-bold font-display mb-1",
-                            isActive ? "text-primary" : "text-foreground"
-                          )}
-                        >
-                          {cfg.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-3">{cfg.subtitle}</p>
-                      </div>
-                      {isActive && (
-                        <div className="bg-primary/10 rounded-full p-1 flex-shrink-0">
-                          <Check className="w-4 h-4 text-primary" />
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className={cn("text-lg font-bold", isActive ? cfg.color : "text-foreground")}>
-                        {cfg.price}
-                      </div>
-                      <div className="text-sm text-primary font-semibold mt-1">
-                        {configPriceMap[key]} — за этот проект
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
+            <div className="mb-4">
+              <ConfigTabs
+                activeConfig={activeConfig}
+                onSelect={setActiveConfig}
+                pricePerProject={configPriceMap}
+              />
             </div>
 
-            {/* Config Details */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeConfig}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-3xl border border-border shadow-xl overflow-hidden"
-              >
-                <div className="p-6 md:p-8 border-b border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-bold">
-                      Комплектация{" "}
-                      <span className={currentConfig.color}>«{currentConfig.title}»</span>
-                    </h3>
-                    <p className="text-muted-foreground text-sm mt-1">{currentConfig.subtitle}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className={cn("text-2xl font-bold", currentConfig.color)}>
-                      {configPriceMap[activeConfig]}
-                    </div>
-                    <div className="text-sm text-muted-foreground">за {project.area} м²</div>
-                  </div>
-                </div>
+            <ConfigFeatures activeConfig={activeConfig} projectArea={project.area} />
 
-                <div className="p-6 md:p-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
-                    {currentConfig.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="flex gap-4 p-4 rounded-xl hover:bg-muted/40 transition-colors"
-                      >
-                        <div className="mt-1 bg-primary/10 p-1.5 rounded-full h-fit flex-shrink-0">
-                          <Check className="w-4 h-4 text-primary" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-foreground mb-1">{feature.name}</h4>
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            {feature.desc}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-8 p-5 bg-amber-50 rounded-2xl flex items-start gap-4 border border-amber-100">
-                    <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-amber-900 leading-relaxed">
-                      Цена рассчитана исходя из {project.area} м² × {activeConfig === "econom" ? "40 000" : activeConfig === "optimum" ? "50 000" : "60 000"} ₽/м². Итоговая стоимость уточняется после подготовки индивидуальной сметы.
-                    </p>
-                  </div>
-
-                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <a href="/#contact" className="flex-1">
-                      <Button size="lg" className="w-full">
-                        Заказать в комплектации «{currentConfig.title}»
-                      </Button>
-                    </a>
-                    <a href="/#contact" className="flex-1">
-                      <Button size="lg" variant="outline" className="w-full">
-                        Получить точный расчёт
-                      </Button>
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            <div className="mt-5 flex flex-col sm:flex-row gap-3">
+              <a href="/#contact" className="flex-1">
+                <Button size="lg" className="w-full">
+                  Заказать в комплектации «{CONFIGURATIONS[activeConfig].title}»
+                </Button>
+              </a>
+              <a href="/#contact" className="flex-1">
+                <Button size="lg" variant="outline" className="w-full">
+                  Получить точный расчёт
+                </Button>
+              </a>
+            </div>
           </motion.div>
 
           {/* Base Specs + Floor Plan */}
