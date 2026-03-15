@@ -1,19 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Info } from "lucide-react";
+import { Check, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CONFIGURATIONS, CONFIG_KEYS, type ConfigKey } from "@/data/configurations";
-
-const CATEGORY_ICONS: Record<string, string> = {
-  "Каркас": "🪵",
-  "Утепление": "🧱",
-  "Окна": "🪟",
-  "Двери": "🚪",
-  "Инженерия": "⚡",
-  "Закладная электрика": "🔌",
-  "Сантехника": "🚿",
-  "Внутренняя отделка": "🎨",
-  "Внешняя отделка": "🏠",
-};
 
 interface ConfigTabsProps {
   activeConfig: ConfigKey;
@@ -98,50 +86,48 @@ export function ConfigFeatures({ activeConfig, projectArea }: ConfigFeaturesProp
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.25 }}
       >
-        {/* Header row */}
+        {/* Header */}
         <div className={cn(
-          "flex items-center justify-between px-5 py-4 rounded-t-2xl border border-b-0",
+          "flex items-center justify-between px-6 py-5 rounded-t-2xl border border-b-0",
           activeConfig === "econom" ? "bg-green-50 border-green-100" :
           activeConfig === "optimum" ? "bg-orange-50 border-orange-100" :
           "bg-amber-50 border-amber-100"
         )}>
           <div>
-            <span className="font-bold text-base">Комплектация «{cfg.title}»</span>
+            <span className="font-bold text-lg">Комплектация «{cfg.title}»</span>
             <p className="text-sm text-muted-foreground mt-0.5">{cfg.priceNote}</p>
           </div>
           <div className="text-right">
-            <div className={cn("text-xl font-bold", cfg.color)}>{cfg.price}</div>
+            <div className={cn("text-2xl font-bold", cfg.color)}>{cfg.price}</div>
             {priceLabel && (
               <div className="text-xs text-muted-foreground mt-0.5">≈ {priceLabel} за {projectArea} м²</div>
             )}
           </div>
         </div>
 
-        {/* Feature table */}
+        {/* Feature grid — card style */}
         <div className={cn(
-          "border border-t-0 rounded-b-2xl overflow-hidden",
+          "border border-t-0 rounded-b-2xl bg-white p-6",
           activeConfig === "econom" ? "border-green-100" :
           activeConfig === "optimum" ? "border-orange-100" :
           "border-amber-100"
         )}>
-          {cfg.features.map((feature, idx) => (
-            <div
-              key={idx}
-              className={cn(
-                "grid grid-cols-[auto_1fr] items-start gap-4 px-5 py-3.5",
-                idx % 2 === 0 ? "bg-white" : "bg-muted/20",
-                idx < cfg.features.length - 1 ? "border-b border-border/30" : ""
-              )}
-            >
-              {/* Label column */}
-              <div className="flex items-center gap-2 min-w-[160px] max-w-[200px]">
-                <span className="text-base leading-none">{CATEGORY_ICONS[feature.name] ?? "•"}</span>
-                <span className="text-sm font-semibold text-foreground whitespace-nowrap">{feature.name}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {cfg.features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="flex gap-3.5 p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors"
+              >
+                <div className="flex-shrink-0 mt-0.5 w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Check className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-foreground leading-tight mb-1">{feature.name}</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{feature.desc}</p>
+                </div>
               </div>
-              {/* Value column */}
-              <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Note */}
