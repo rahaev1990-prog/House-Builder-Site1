@@ -2,49 +2,49 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: hsl(40 33% 98%); /* Warm off-white #faf9f6 */
-  --color-foreground: hsl(24 6% 15%); /* Dark brown/gray #292524 */
+  --color-background: hsl(36 28% 94%); /* Warm sand, richer than near-white */
+  --color-foreground: hsl(24 12% 10%); /* Deep warm dark */
   
   /* Primary: Warm Amber/Orange */
-  --color-primary: hsl(32 95% 44%); 
+  --color-primary: hsl(30 96% 40%); 
   --color-primary-foreground: hsl(0 0% 100%);
   
   /* Secondary: Forest Green */
-  --color-secondary: hsl(142 16% 28%); 
+  --color-secondary: hsl(142 22% 22%); 
   --color-secondary-foreground: hsl(0 0% 100%);
   
-  /* Accent: Soft Terracotta */
-  --color-accent: hsl(15 60% 60%);
+  /* Accent: Terracotta */
+  --color-accent: hsl(15 65% 52%);
   --color-accent-foreground: hsl(0 0% 100%);
 
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(24 6% 15%);
+  --color-card: hsl(36 30% 98%);
+  --color-card-foreground: hsl(24 12% 10%);
   
-  --color-muted: hsl(40 20% 92%);
-  --color-muted-foreground: hsl(24 6% 45%);
+  --color-muted: hsl(36 22% 86%);
+  --color-muted-foreground: hsl(24 8% 38%);
   
-  --color-border: hsl(40 20% 85%);
-  --color-input: hsl(40 20% 85%);
-  --color-ring: hsl(32 95% 44%);
+  --color-border: hsl(34 20% 74%);
+  --color-input: hsl(34 20% 74%);
+  --color-ring: hsl(30 96% 40%);
 
   --font-sans: 'DM Sans', sans-serif;
   --font-display: 'Outfit', sans-serif;
 }
 
 :root {
-  --background: 40 33% 98%;
-  --foreground: 24 6% 15%;
-  --primary: 32 95% 44%;
+  --background: 36 28% 94%;
+  --foreground: 24 12% 10%;
+  --primary: 30 96% 40%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 142 16% 28%;
+  --secondary: 142 22% 22%;
   --secondary-foreground: 0 0% 100%;
-  --card: 0 0% 100%;
-  --card-foreground: 24 6% 15%;
-  --muted: 40 20% 92%;
-  --muted-foreground: 24 6% 45%;
-  --border: 40 20% 85%;
-  --input: 40 20% 85%;
-  --ring: 32 95% 44%;
+  --card: 36 30% 98%;
+  --card-foreground: 24 12% 10%;
+  --muted: 36 22% 86%;
+  --muted-foreground: 24 8% 38%;
+  --border: 34 20% 74%;
+  --input: 34 20% 74%;
+  --ring: 30 96% 40%;
   --radius: 1rem;
 }
 
