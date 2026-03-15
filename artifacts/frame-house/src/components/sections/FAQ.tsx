@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const FAQS = [
   {
     q: "Сколько стоит построить каркасный дом?",
-    a: "Стоимость зависит от площади, сложности проекта и выбранной комплектации. В среднем, цена за квадратный метр теплого контура начинается от 35 000 рублей. Для точного расчета мы готовим подробную смету после выбора проекта."
+    a: "Стоимость зависит от площади, сложности проекта и выбранной комплектации. В среднем, цена за квадратный метр теплого контура начинается от 40 000 рублей. Для точного расчета мы готовим подробную смету после выбора проекта."
   },
   {
     q: "Какой срок строительства дома под ключ?",
@@ -34,17 +34,20 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 bg-background border-t border-border">
+    <section className="py-16 md:py-24 bg-background border-t border-border">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
             Частые <span className="text-primary">вопросы</span>
           </h2>
+          <p className="text-muted-foreground text-base md:text-lg">
+            Ответы на самые популярные вопросы о строительстве каркасных домов
+          </p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-3">
           {FAQS.map((faq, index) => (
-            <div 
+            <div
               key={index}
               className={cn(
                 "border rounded-2xl overflow-hidden transition-colors duration-300",
@@ -52,18 +55,19 @@ export function FAQ() {
               )}
             >
               <button
-                className="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none"
+                className="w-full px-5 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                aria-expanded={openIndex === index}
               >
-                <span className="font-bold text-lg pr-8">{faq.q}</span>
+                <span className="font-bold text-sm md:text-base lg:text-lg pr-4">{faq.q}</span>
                 <div className={cn(
-                  "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300",
+                  "flex-shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-transform duration-300",
                   openIndex === index ? "bg-primary text-white rotate-180" : "bg-muted text-foreground"
                 )}>
-                  <ChevronDown className="w-5 h-5" />
+                  <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
               </button>
-              
+
               <AnimatePresence>
                 {openIndex === index && (
                   <motion.div
@@ -72,7 +76,7 @@ export function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <div className="px-6 pb-6 pt-0 text-muted-foreground leading-relaxed border-t border-border/50 mt-2">
+                    <div className="px-5 md:px-6 pb-5 pt-0 text-muted-foreground text-sm md:text-base leading-relaxed border-t border-border/50">
                       <div className="pt-4">{faq.a}</div>
                     </div>
                   </motion.div>

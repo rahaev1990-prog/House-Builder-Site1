@@ -12,18 +12,23 @@ import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
-  // Basic SEO setup for single page
   useEffect(() => {
-    document.title = "Строительство каркасных домов под ключ | КаркасПро";
-    
-    // Manage meta description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', 'Строительство современных, теплых каркасных домов под ключ за 3-6 месяцев. Проекты, комплектации, фиксированная смета и гарантия 10 лет.');
+    document.title = "Строительство каркасных домов под ключ | КаркасПро — Москва и МО";
+
+    const setMeta = (name: string, content: string, prop = false) => {
+      const attr = prop ? "property" : "name";
+      let el = document.querySelector(`meta[${attr}="${name}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+
+    setMeta("description", "КаркасПро — строительство тёплых каркасных домов под ключ за 3–6 месяцев. Проекты от 40 000 ₽/м². Фиксированная смета, официальный договор, гарантия 10 лет. Москва и Подмосковье.");
+    setMeta("og:title", "Строительство каркасных домов под ключ | КаркасПро", true);
+    setMeta("og:description", "Строим тёплые каркасные дома за 3–6 месяцев. Фиксированная цена, гарантия 10 лет. Москва и МО.", true);
   }, []);
 
   return (

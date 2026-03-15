@@ -46,7 +46,7 @@ export default function ProjectPage() {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      <main className="pt-24 pb-20">
+      <main className="pt-20 md:pt-24 pb-16 md:pb-20">
         <div className="container mx-auto px-4 md:px-6">
           {/* Breadcrumb */}
           <motion.div
@@ -66,7 +66,7 @@ export default function ProjectPage() {
           </motion.div>
 
           {/* Hero: Gallery + Info */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-10 md:mb-16">
             {/* Gallery */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}

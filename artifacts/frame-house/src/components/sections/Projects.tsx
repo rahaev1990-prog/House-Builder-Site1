@@ -6,7 +6,7 @@ import { PROJECTS } from "@/data/projects";
 
 export function Projects() {
   return (
-    <section id="projects" className="py-24 bg-background">
+    <section id="projects" className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <motion.div
